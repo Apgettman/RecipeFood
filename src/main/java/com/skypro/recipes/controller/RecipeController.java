@@ -2,6 +2,8 @@ package com.skypro.recipes.controller;
 
 import com.skypro.recipes.model.Recipe;
 import com.skypro.recipes.service.RecipeService;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +18,7 @@ public class RecipeController {
 
         this.recipeService = recipeService;
     }
+
     @GetMapping
     public List<Recipe> getAll() {
         return this.recipeService.getAll();
@@ -28,9 +31,11 @@ public class RecipeController {
     }
 
     @PostMapping
-    public Recipe addRecipe(@RequestBody Recipe recipe) {
-
-        return recipeService.add(recipe);
+    public ResponseEntity<?> addRecipe(@RequestBody Recipe recipe) {
+        if (StringUtils.isBlank(recipe.getTitle())) {
+            return ResponseEntity.badRequest().body("Название рецепта не может быть пустым");
+        }
+            return ResponseEntity.ok(recipeService.add(recipe));
     }
 
     @PutMapping("/{id}")
