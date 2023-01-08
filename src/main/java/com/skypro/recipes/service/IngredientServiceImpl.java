@@ -5,12 +5,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skypro.recipes.model.Ingredient;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@ResponseStatus
 public class IngredientServiceImpl implements IngredientService {
     private Map<Long, Ingredient> ingredientMap = new HashMap<>();
     private Long counter = 0L;
@@ -52,23 +54,24 @@ public class IngredientServiceImpl implements IngredientService {
         return ingredientMap.remove(id);
     }
 
-
     private void saveToFile() {
         try {
             String json = new ObjectMapper().writeValueAsString(ingredientMap);
             fileServiceIngredient.saveToFile(json);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            throw new CustomException("Файл не удалось сохранить!");
         }
     }
 
     private void readFromFile() {
-        String json = fileServiceIngredient.readFromFile();
+            String json = fileServiceIngredient.readFromFile();
         try {
-             ingredientMap = new ObjectMapper().readValue(json, new TypeReference<HashMap<Long, Ingredient>>() {
+            ingredientMap = new ObjectMapper().readValue(json, new TypeReference<HashMap<Long, Ingredient>>() {
             });
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            throw new CustomException("Файлов для чтения нет!");
         }
     }
 }

@@ -5,14 +5,18 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skypro.recipes.model.Recipe;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@ResponseStatus
+
 public class RecipeServiceImpl implements RecipeService {
     private Map<Long, Recipe> recipeMap = new HashMap<>();
     private Long counter = 0L;
@@ -60,22 +64,28 @@ public class RecipeServiceImpl implements RecipeService {
         return new ArrayList<>(this.recipeMap.values());
     }
 
+    @Override
+    public Path creatReport(Recipe recipe) {
+        return null;
+    }
+
     private void saveToFile() {
         try {
             String json = new ObjectMapper().writeValueAsString(recipeMap);
             fileServiceRecipe.saveToFile(json);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            throw new CustomException("Файл не удалось сохранить!");
         }
     }
-
     private void readFromFile() {
-        String json = fileServiceRecipe.readFromFile();
         try {
+            String json = fileServiceRecipe.readFromFile();
             recipeMap = new ObjectMapper().readValue(json, new TypeReference<HashMap<Long, Recipe>>() {
             });
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            throw new CustomException("Файлов для чтения нет!");
         }
     }
 }
