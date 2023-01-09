@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-@ResponseStatus
 public class IngredientServiceImpl implements IngredientService {
     private Map<Long, Ingredient> ingredientMap = new HashMap<>();
     private Long counter = 0L;
@@ -54,6 +53,7 @@ public class IngredientServiceImpl implements IngredientService {
         return ingredientMap.remove(id);
     }
 
+    @ResponseStatus
     private void saveToFile() {
         try {
             String json = new ObjectMapper().writeValueAsString(ingredientMap);
@@ -64,8 +64,9 @@ public class IngredientServiceImpl implements IngredientService {
         }
     }
 
+    @ResponseStatus
     private void readFromFile() {
-            String json = fileServiceIngredient.readFromFile();
+        String json = fileServiceIngredient.readFromFile();
         try {
             ingredientMap = new ObjectMapper().readValue(json, new TypeReference<HashMap<Long, Ingredient>>() {
             });

@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@ResponseStatus
-
 public class RecipeServiceImpl implements RecipeService {
     private Map<Long, Recipe> recipeMap = new HashMap<>();
     private Long counter = 0L;
@@ -69,6 +67,7 @@ public class RecipeServiceImpl implements RecipeService {
         return null;
     }
 
+    @ResponseStatus
     private void saveToFile() {
         try {
             String json = new ObjectMapper().writeValueAsString(recipeMap);
@@ -78,6 +77,7 @@ public class RecipeServiceImpl implements RecipeService {
             throw new CustomException("Файл не удалось сохранить!");
         }
     }
+    @ResponseStatus
     private void readFromFile() {
         try {
             String json = fileServiceRecipe.readFromFile();
