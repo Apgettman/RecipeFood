@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skypro.recipes.model.Recipe;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -24,6 +25,13 @@ public class RecipeServiceImpl implements RecipeService {
         this.fileServiceRecipe = fileServiceRecipe;
     }
 
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public static class RecipeObjectNotFoundException extends RuntimeException {
+        RecipeObjectNotFoundException(String message) {
+            super(message);
+        }
+    }
+
     @Override
     public Recipe add(Recipe recipe) {
         recipeMap.put(this.counter++, recipe);
@@ -33,7 +41,6 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe get(long id) {
-
         return recipeMap.get(id);
     }
 
@@ -74,9 +81,10 @@ public class RecipeServiceImpl implements RecipeService {
             fileServiceRecipe.saveToFile(json);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            throw new CustomException("Файл не удалось сохранить!");
+            throw new RecipeObjectNotFoundException("Файл не удалось сохранить!");
         }
     }
+
     @ResponseStatus
     private void readFromFile() {
         try {
@@ -85,7 +93,7 @@ public class RecipeServiceImpl implements RecipeService {
             });
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            throw new CustomException("Файлов для чтения нет!");
+            throw new RecipeObjectNotFoundException("Файлов для чтения нет!");
         }
     }
 }

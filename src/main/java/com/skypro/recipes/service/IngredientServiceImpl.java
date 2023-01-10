@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skypro.recipes.model.Ingredient;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -20,7 +21,12 @@ public class IngredientServiceImpl implements IngredientService {
     public IngredientServiceImpl(FileServiceIngredient fileServiceIngredient) {
         this.fileServiceIngredient = fileServiceIngredient;
     }
-
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public static class IngredientObjectNotFoundException extends RuntimeException{
+        IngredientObjectNotFoundException (String message) {
+            super(message);
+        }
+    }
 
     @Override
     public Ingredient add(Ingredient ingredient) {
@@ -60,7 +66,7 @@ public class IngredientServiceImpl implements IngredientService {
             fileServiceIngredient.saveToFile(json);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            throw new CustomException("Файл не удалось сохранить!");
+            throw new IngredientObjectNotFoundException("Файл не удалось сохранить!");
         }
     }
 
@@ -72,7 +78,7 @@ public class IngredientServiceImpl implements IngredientService {
             });
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            throw new CustomException("Файлов для чтения нет!");
+            throw new IngredientObjectNotFoundException("Файлов для чтения нет!");
         }
     }
 }
