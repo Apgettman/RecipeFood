@@ -3,8 +3,8 @@ package com.skypro.recipes.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.skypro.recipes.exception.RecipeObjectNotFoundException;
 import com.skypro.recipes.model.Recipe;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -23,13 +23,6 @@ public class RecipeServiceImpl implements RecipeService {
 
     public RecipeServiceImpl(FileServiceRecipe fileServiceRecipe) {
         this.fileServiceRecipe = fileServiceRecipe;
-    }
-
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    public static class RecipeObjectNotFoundException extends RuntimeException {
-        RecipeObjectNotFoundException(String message) {
-            super(message);
-        }
     }
 
     @Override

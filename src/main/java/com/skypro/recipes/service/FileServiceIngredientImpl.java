@@ -1,9 +1,8 @@
 package com.skypro.recipes.service;
 
+import com.skypro.recipes.exception.IngredientFileSavingException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,15 +15,6 @@ public class FileServiceIngredientImpl implements FileServiceIngredient {
     private String ingredientFilePath;
     @Value("${name.of.ingredient.file}")
     private String ingredientFileName;
-
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    public static class IngredientFileSavingException extends RuntimeException {
-
-        public IngredientFileSavingException(String message) {
-
-            super(message);
-        }
-    }
 
     @Override
     public boolean saveToFile(String json) {
