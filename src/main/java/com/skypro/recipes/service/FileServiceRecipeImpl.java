@@ -16,6 +16,12 @@ public class FileServiceRecipeImpl implements FileServiceRecipe {
     @Value("${name.of.data.file}")
     private String dataFileName;
 
+    @Value("${path.to.recipesTXT.file}")
+    private String recipesTxtFilePath;
+
+    @Value("${name.of.recipesTXT.file}")
+    private String recipeTxtFileName;
+
     @Override
     public boolean saveToFile(String json) {
         try {
@@ -24,6 +30,26 @@ public class FileServiceRecipeImpl implements FileServiceRecipe {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+    @Override
+    public boolean saveRecipesToTxtFile(String txt) {
+        try {
+            cleanRecipeTxtFile();
+            Files.writeString(Path.of(recipesTxtFilePath, recipeTxtFileName), txt);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    private void cleanRecipeTxtFile() {
+        try {
+            Path path = Path.of(recipesTxtFilePath, recipeTxtFileName);
+            Files.deleteIfExists(path);
+            Files.createFile(path);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -66,5 +92,13 @@ public class FileServiceRecipeImpl implements FileServiceRecipe {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public File getTxtFile() {
+        if (Files.exists(Path.of(recipesTxtFilePath, recipeTxtFileName))) {
+            return new File(recipesTxtFilePath + "/" + recipeTxtFileName);
+        }
+        return null;
     }
 }

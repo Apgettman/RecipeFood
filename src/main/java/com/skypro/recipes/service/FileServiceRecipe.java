@@ -7,6 +7,8 @@ public interface FileServiceRecipe {
 
     boolean saveToFile(String json);
 
+    boolean saveRecipesToTxtFile(String txt);
+
     String readFromFile();
 
     File getDateFile();
@@ -16,4 +18,6 @@ public interface FileServiceRecipe {
     Path createTempFile(String suffix);
 
     boolean cleanDataFile();
+
+    File getTxtFile();
 }
