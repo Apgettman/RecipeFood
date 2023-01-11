@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -44,7 +45,12 @@ public class FileServiceIngredientImpl implements FileServiceIngredient {
         }
     }
 
-    private boolean cleanDataFile() {
+    @Override
+    public File getDataFile() {
+        return new File(ingredientFilePath + "/"+ ingredientFileName);
+    }
+
+    public boolean cleanDataFile() {
         Path path = Path.of(ingredientFilePath, ingredientFileName);
         try {
             Files.deleteIfExists(path);

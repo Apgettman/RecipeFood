@@ -24,6 +24,7 @@ public class RecipeController {
 
     @GetMapping
     public List<Recipe> getAll() {
+
         return this.recipeService.getAll();
     }
 
@@ -40,7 +41,7 @@ public class RecipeController {
         if (StringUtils.isBlank(recipe.getTitle())) {
             return ResponseEntity.badRequest().body("Название рецепта не может быть пустым");
         }
-            return ResponseEntity.ok(recipeService.add(recipe));
+        return ResponseEntity.ok(recipeService.add(recipe));
     }
 
     @PutMapping("/{id}")
