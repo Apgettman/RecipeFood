@@ -22,7 +22,7 @@ public class FileControllerRecipe {
     public FileControllerRecipe(FileServiceRecipeImpl fileServiceRecipeImpl) {
         this.fileServiceRecipeImpl = fileServiceRecipeImpl;
     }
-    @GetMapping("recipeExportAsTxt")
+    @GetMapping("/recipe/save/txt")
     @Operation(summary = "Сохранение файла в формате txt")
     public ResponseEntity<InputStreamResource> downloadRecipesAsTxt() throws FileNotFoundException {
         File file = fileServiceRecipeImpl.getTxtFile();

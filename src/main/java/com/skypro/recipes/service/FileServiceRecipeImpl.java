@@ -3,6 +3,7 @@ package com.skypro.recipes.service;
 import com.skypro.recipes.exception.RecipeFileSavingException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,10 +17,10 @@ public class FileServiceRecipeImpl implements FileServiceRecipe {
     @Value("${name.of.data.file}")
     private String dataFileName;
 
-    @Value("${path.to.recipesTXT.file}")
+    @Value("${path.to.recipesTxt.file}")
     private String recipesTxtFilePath;
 
-    @Value("${name.of.recipesTXT.file}")
+    @Value("${name.of.recipesTxt.file}")
     private String recipeTxtFileName;
 
     @Override
@@ -39,6 +40,7 @@ public class FileServiceRecipeImpl implements FileServiceRecipe {
             Files.writeString(Path.of(recipesTxtFilePath, recipeTxtFileName), txt);
             return true;
         } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -99,6 +101,6 @@ public class FileServiceRecipeImpl implements FileServiceRecipe {
         if (Files.exists(Path.of(recipesTxtFilePath, recipeTxtFileName))) {
             return new File(recipesTxtFilePath + "/" + recipeTxtFileName);
         }
-        return null;
+        throw new NotFoundException("No txt file");
     }
 }
